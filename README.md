@@ -3,22 +3,52 @@ Compiler for language Pause
 
 ---
 
-BLOCK = { EXPRESSION } ;
+BLOCK = "{", { COMMAND }, "}" ; 
 
-ASSIGNMENT = IDENTIFIER, "=", EXPRESSION ;
+COMMAND = ( λ | ASSIGNMENT | PRINT | BLOCK | WHILE | IF), ";" ;
 
-PRINT = "println", "(", EXPRESSION, ")" ;
+COMMANDIF = (PRINT | BLOCK | WHILE | IF), ";" ;
 
-EXPRESSION = TERM, { ("+" | "-"), TERM } ;
+COMMANDELSEIF = "{", ( ASSIGNMENT | PRINT | WHILE ), "}", ;" ;
 
-TERM = FACTOR, { ("*" | "/"), FACTOR } ;
+WHILE = "loop", "(", OREXPR ,")", BLOCK;
 
-FACTOR = (("+" | "-"), FACTOR) | NUMBER | "(", EXPRESSION, ")" | IDENTIFIER | ASSIGNMENT | PRINTLN, FACTOR;
+FOR = "do", "(", IDENTIFIER, ";", OREXPR, ";", EXPRESSION, ";", ")", BLOCK;
 
-IDENTIFIER = LETTER, { LETTER | DIGIT | "_" } ;
+IF = "test", "(", OREXPR ,")", BLOCK, (ELSEIF | λ), (("failed", COMMANDIF) | λ );
 
-NUMBER = DIGIT, { DIGIT } ;
+ELSEIF = "redo", (COMMANDELSEIF | ELSE);
 
-LETTER = ( a | ... | z | A | ... | Z ) ;
+ELSE = "failed", COMMANDIF;
 
-DIGIT = ( 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 ) ; 
+ASSIGNMENT = IDENTIFIER, "=", EXPRESSION ; 
+
+PRINT = "show", "(", OREXPR, ")" ; 
+
+OREXPR = ANDEXPR, { "||", ANDEXPR } ;
+
+ANDEXPR = EQEXPR, { "&&", EQEXPR } ;
+
+EQEXPR = RELEXPR, { "==", RELEXPR } ;
+
+RELEXPR = EXPRESSION, { (">"|"<"),  EXPRESSION }
+
+EXPRESSION = TERM, { ("+" | "-"), TERM } ; 
+
+TERM = FACTOR, { ("*" | "/"), FACTOR } ; 
+
+FACTOR = (("+" | "-" | "!" ), FACTOR) | NUMBER | "(", OREXPR,  ")" | IDENTIFIER | READLN;
+
+READLN = "readln", "(",")";
+
+IDENTIFIER = "new", TYPE, LETTER, { LETTER | DIGIT | "_" } ; 
+
+FUNCTION = "=>", LETTER, { LETTER | DIGIT | "_" }, "(", {IDENTIFIER | λ}, ")", BLOCK;
+
+TYPE = IDENTIFIER;
+
+NUMBER = DIGIT, { DIGIT } ; 
+
+LETTER = ( a | ... | z | A | ... | Z ) ; 
+
+DIGIT = ( 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 ) ;
