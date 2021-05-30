@@ -41,7 +41,7 @@ FACTOR = (("+" | "-" | "!" ), FACTOR) | NUMBER | "(", OREXPR,  ")" | IDENTIFIER 
 
 READLN = "readln", "(",")";
 
-IDENTIFIER = "new", TYPE, LETTER, { LETTER | DIGIT | "_" } ; 
+IDENTIFIER = TYPE, LETTER, { LETTER | DIGIT | "_" } ; 
 
 FUNCTION = "=>", LETTER, { LETTER | DIGIT | "_" }, "(", {IDENTIFIER | λ}, ")", BLOCK;
 
