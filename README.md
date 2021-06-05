@@ -3,52 +3,42 @@ Compiler for language Pause
 
 ---
 
-BLOCK = "{", { COMMAND }, "}" ; 
+FUNCDEFBLOCK = TYPE, IDENTIFIER, "=>", (TYPE, IDENTIFIER | ":"), "<=", COMMAND
 
-COMMAND = ( λ | ASSIGNMENT | PRINT | BLOCK | WHILE | IF), ";" ;
+BLOCK = "[", { COMMAND }, "]" ;
 
-COMMANDIF = (PRINT | BLOCK | WHILE | IF), ";" ;
+COMMAND = ( λ | ASSIGNMENT | PRINT | BLOCK | WHILE | IF | STRDEF | BOOLDEF | INTDEF | | FOR | (IDENTIFIER | IDENTIFIER, "=>", (OREXPR | ,), "<=")), ";" ;
 
-COMMANDELSEIF = "{", ( ASSIGNMENT | PRINT | WHILE ), "}", ;" ;
+WHILE = "loop", "=>", OREXPR ,"<=", COMMAND;
 
-WHILE = "loop", "(", OREXPR ,")", BLOCK;
+FOR = "do", "=>", COMMAND, OREXPR, COMMAND ,"<=", COMMAND;
 
-FOR = "do", "(", IDENTIFIER, ";", OREXPR, ";", EXPRESSION, ";", ")", BLOCK;
+IF = "test", "=>", OREXPR ,"<=", COMMAND, (("redo", COMMAND) | λ );
 
-IF = "test", "(", OREXPR ,")", BLOCK, (ELSEIF | λ), (("failed", COMMANDIF) | λ );
+ASSIGNMENT = IDENTIFIER, "=", EXPRESSION ;
 
-ELSEIF = "redo", (COMMANDELSEIF | ELSE);
+PRINT = "show", "=>", OREXPR, "<=" ;
 
-ELSE = "failed", COMMANDIF;
+OREXPR = NOTEQEXPR, { "||", NOTEQEXPR } ;
 
-ASSIGNMENT = IDENTIFIER, "=", EXPRESSION ; 
-
-PRINT = "show", "(", OREXPR, ")" ; 
-
-OREXPR = ANDEXPR, { "||", ANDEXPR } ;
+NOTEQEXPR = ANDEXPR, { "#", ANDEXPR } ;
 
 ANDEXPR = EQEXPR, { "&&", EQEXPR } ;
 
-EQEXPR = RELEXPR, { "==", RELEXPR } ;
+EQEXPR = RELEXPR, { "?", RELEXPR } ;
 
-RELEXPR = EXPRESSION, { (">"|"<"),  EXPRESSION }
+RELEXPR = EXPRESSION, { (">"|"<"), EXPRESSION }
 
-EXPRESSION = TERM, { ("+" | "-"), TERM } ; 
+EXPRESSION = TERM, { ("+" | "-"), TERM } ;
 
-TERM = FACTOR, { ("*" | "/"), FACTOR } ; 
+TERM = FACTOR, { ("*" | "/"), FACTOR } ;
 
-FACTOR = (("+" | "-" | "!" ), FACTOR) | NUMBER | "(", OREXPR,  ")" | IDENTIFIER | READLN;
+FACTOR = (("+" | "-" | "!" ), FACTOR) | NUMBER | BOOL | STR | "=>", OREXPR, "<=" | IDENTIFIER | (IDENTIFIER, "=>", (OREXPR | ":"), "<=") | READLN;
 
-READLN = "readln", "(",")";
+READLN = "ask", "=>","<=";
 
-IDENTIFIER = TYPE, LETTER, { LETTER | DIGIT | "_" } ; 
+IDENTIFIER = LETTER, { LETTER | DIGIT | "_" } ;
 
-FUNCTION = "=>", LETTER, { LETTER | DIGIT | "_" }, "(", {IDENTIFIER | λ}, ")", BLOCK;
+INTDEF = int, IDENTIFIER ; BOOLDEF = bool, IDENTIFIER ; STRDEF = str, IDENTIFIER ;
 
-TYPE = IDENTIFIER;
-
-NUMBER = DIGIT, { DIGIT } ; 
-
-LETTER = ( a | ... | z | A | ... | Z ) ; 
-
-DIGIT = ( 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 ) ;
+NUMBER = DIGIT, { DIGIT } ; BOOL = true | false ; STR = " , LETTER | DIGIT, " ; LETTER = ( a | ... | z | A | ... | Z ) ; DIGIT = ( 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 ) ;
