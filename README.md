@@ -68,3 +68,5 @@ definição. Alguns exemplos de sua sintaxe podem ser vistos nos testes de 1 a 5
     
    Em questão a motivação da linguagem, o nome surge de um importante componente em jogos, o pause. Portanto, a sintaxe da linguagem é mais informal, e todas as plavaras de comando tem um tom mandatório,
 como se estivessemos mandando o compilador a rodar algo em terceira pessoa (test, show, do, loop, ...), dando a sensação que quem comanda é o programador, ou seja, o usuário. Isso faz referencia a jogos, pois voce espera que o jogador se sinta poderoso e dominante em relação ao jogo.
+
+Para rodar basta criar um arquivo com extensao ".c" e rodar "python3 main.py $(arquivo).c"
