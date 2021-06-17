@@ -879,7 +879,9 @@ class Parser:
         elif self.tokenizer.actual.type_ == Type.EOL: 
             self.tokenizer.select_next()
 
-        else: raise_error("not closed sintax")
+        else: 
+            print(self.tokenizer.actual.type_)
+            raise_error("not closed sintax")
 
     def block(self):
         trees = []
